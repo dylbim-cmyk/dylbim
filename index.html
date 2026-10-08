@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="积分兑换商城 - 浏览礼品、积分兑换、订单追踪的一站式积分消耗平台">
+  <meta name="theme-color" content="#272E3B">
+  <title>积分兑换商城</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ================= 用户登录弹窗（按需弹出，不拦截浏览） ================= -->
+  <div id="loginView" class="modal-backdrop login-view" hidden>
+    <div class="login-card">
+      <button class="modal-close" data-close-modal aria-label="关闭">×</button>
+      <div class="login-brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.5 7.2 17l.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+          </svg>
+        </span>
+        <span class="brand-name">积分兑换商城</span>
+      </div>
+      <h2 class="login-title">用户登录</h2>
+      <p class="login-sub" id="loginSub">登录后即可使用积分兑换好礼</p>
+      <form id="userLoginForm" class="login-form" autocomplete="off">
+        <label class="field-label" for="loginUsername">用户名</label>
+        <input class="field-input" id="loginUsername" type="text" placeholder="请输入用户名" required>
+        <label class="field-label" for="loginPassword">密码</label>
+        <input class="field-input" id="loginPassword" type="password" placeholder="请输入密码" required>
+        <button type="submit" class="btn btn-primary btn-block">登录</button>
+      </form>
+      <p class="login-hint">账号由管理员在后台创建，如未开通请联系管理员</p>
+      <a href="admin.html" class="login-admin-link">前往管理后台</a>
+    </div>
+  </div>
+
+  <!-- ================= 应用主体（默认可见，可自由浏览） ================= -->
+  <div id="appView">
+
+  <!-- 顶部导航 -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#mall" class="brand" aria-label="积分兑换商城首页">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 14.5 7.2 17l.9-5.4L4.2 7.7l5.4-.8L12 2z"/>
+          </svg>
+        </span>
+        <span class="brand-name">积分兑换商城</span>
+      </a>
+
+      <nav class="main-nav" aria-label="主导航">
+        <a href="#mall" class="nav-link active" data-tab="mall">商城首页</a>
+        <div class="nav-item-dropdown" id="navAllGoods">
+          <a href="#mall" class="nav-link nav-dropdown-trigger" id="navAllGoodsBtn" aria-haspopup="true" aria-expanded="false">
+            全部商品
+            <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </a>
+          <div class="nav-dropdown" role="menu" aria-label="商品分类">
+            <a href="#mall" class="dropdown-item" role="menuitem" data-nav="all">全部商品</a>
+            <a href="#mall" class="dropdown-item" role="menuitem" data-nav-cat="physical">实物礼品</a>
+            <a href="#mall" class="dropdown-item" role="menuitem" data-nav-cat="virtual">虚拟权益</a>
+            <a href="#mall" class="dropdown-item" role="menuitem" data-nav-cat="coupon">优惠券</a>
+            <a href="#mall" class="dropdown-item" role="menuitem" data-nav-cat="card">卡券充值</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="points-pill" id="pointsPill" role="button" tabindex="0" aria-label="查看积分明细" title="点击查看积分明细">
+        <span class="points-label">积分余额</span>
+        <span class="points-value" id="headerPoints">--</span>
+      </div>
+
+      <div class="user-bar" id="userBar">
+        <button class="btn-link" id="loginBtn" type="button">登录</button>
+        <div class="user-center nav-item-dropdown" id="userCenter" hidden>
+          <button class="user-center-btn" id="userCenterBtn" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="user-avatar" id="userAvatar" aria-hidden="true"></span>
+            <span class="user-name" id="headerUserName"></span>
+            <svg class="nav-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="nav-dropdown user-dropdown" role="menu" aria-label="个人中心">
+            <p class="dropdown-header" id="userDropdownName"></p>
+            <a href="#mall" class="dropdown-item" role="menuitem" data-nav="points">积分明细</a>
+            <a href="#orders" class="dropdown-item" role="menuitem" data-tab="orders">我的兑换</a>
+            <a href="#mall" class="dropdown-item" role="menuitem" data-nav="address">收货地址</a>
+            <div class="dropdown-divider" role="separator"></div>
+            <button class="dropdown-item dropdown-logout" id="logoutBtn" type="button" role="menuitem">退出登录</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main">
+
+    <!-- ================= 礼品商城 Tab ================= -->
+    <section id="mall" class="tab-panel active" aria-labelledby="mallTitle">
+      <!-- Hero 区 -->
+      <div class="hero">
+        <div class="hero-content">
+          <p class="hero-eyebrow">POINTS REWARDS</p>
+          <h1 class="hero-title" id="mallTitle">积分有价，好礼有心</h1>
+          <p class="hero-sub">攒下的每一分，都值得一份好礼。浏览下方礼品，点击兑换即可消耗积分。</p>
+          <div class="hero-stats">
+            <div class="stat-card">
+              <span class="stat-label">可用积分</span>
+              <span class="stat-value" id="heroPoints">--</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">本月已兑换</span>
+              <span class="stat-value" id="heroRedeemed">--</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">在售礼品</span>
+              <span class="stat-value" id="heroGifts">--</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 积分公告 Banner（由后台「首页公告」维护，接口异常时保留下方静态兜底） -->
+      <div id="announcementBox">
+        <div class="promo-banner" role="region" aria-label="积分公告">
+          <span class="banner-tag">积分公告</span>
+          <p class="banner-text">年度积分将于 <strong>12 月 31 日</strong> 统一清零，请及时兑换心仪好礼，避免积分浪费</p>
+          <a href="#giftGrid" class="banner-link" data-nav="all">去挑选礼品</a>
+        </div>
+      </div>
+
+      <!-- 商城工具栏 -->
+      <div class="mall-toolbar">
+        <div class="category-tabs" role="tablist" aria-label="礼品分类">
+          <button class="cat-btn active" role="tab" aria-selected="true" data-cat="all">全部</button>
+          <button class="cat-btn" role="tab" aria-selected="false" data-cat="physical">实物礼品</button>
+          <button class="cat-btn" role="tab" aria-selected="false" data-cat="virtual">虚拟权益</button>
+          <button class="cat-btn" role="tab" aria-selected="false" data-cat="coupon">优惠券</button>
+          <button class="cat-btn" role="tab" aria-selected="false" data-cat="card">卡券充值</button>
+        </div>
+        <div class="toolbar-right">
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input type="search" id="searchInput" class="search-input" placeholder="搜索心仪礼品" aria-label="搜索礼品">
+          </div>
+          <label class="sort-select-wrap" for="sortSelect">
+            <span class="visually-hidden">排序方式</span>
+            <select id="sortSelect" class="sort-select">
+              <option value="default">默认排序</option>
+              <option value="points-asc">积分从低到高</option>
+              <option value="points-desc">积分从高到低</option>
+              <option value="hot">最热兑换</option>
+            </select>
+          </label>
+          <span class="result-count" id="resultCount"></span>
+        </div>
+      </div>
+
+      <!-- 礼品网格 -->
+      <div class="gift-grid" id="giftGrid" aria-live="polite"></div>
+
+      <!-- 空状态 -->
+      <div class="empty-state" id="emptyState" hidden>
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+          </svg>
+        </div>
+        <p class="empty-title">没有找到相关礼品</p>
+        <p class="empty-sub">换个分类或排序方式试试</p>
+      </div>
+    </section>
+
+    <!-- ================= 我的兑换 Tab ================= -->
+    <section id="orders" class="tab-panel" aria-labelledby="ordersTitle" hidden>
+      <div class="page-head">
+        <h2 id="ordersTitle">我的兑换记录</h2>
+        <p class="page-desc">追踪每一笔兑换订单的状态</p>
+      </div>
+
+      <div class="order-tabs" role="tablist" aria-label="订单状态筛选">
+        <button class="order-tab active" role="tab" aria-selected="true" data-status="all">全部</button>
+        <button class="order-tab" role="tab" aria-selected="false" data-status="pending">待发货</button>
+        <button class="order-tab" role="tab" aria-selected="false" data-status="shipped">已发货</button>
+        <button class="order-tab" role="tab" aria-selected="false" data-status="done">已完成</button>
+      </div>
+
+      <div class="order-list" id="orderList" aria-live="polite"></div>
+
+      <div class="empty-state" id="orderEmpty" hidden>
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2l-2 4v14a2 2 0 002 2h12a2 2 0 002-2V6l-2-4H6z"/><path d="M2 6h20"/><path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+        </div>
+        <p class="empty-title">暂无兑换记录</p>
+        <p class="empty-sub">去礼品商城挑选一份好礼吧</p>
+        <button class="btn btn-primary" data-goto-mall>去逛逛</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- 底部 -->
+  <footer class="site-footer">
+    <p>积分兑换商城 · 动态版 v2.0</p>
+    <p class="footer-hint">版权所有 &copy; 2026 dyl · <a href="admin.html" class="footer-link">管理后台</a></p>
+  </footer>
+
+  <!-- ================= 礼品详情弹窗 ================= -->
+  <div class="modal-backdrop" id="detailModal" hidden>
+    <div class="modal gift-detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+      <button class="modal-close" data-close-modal aria-label="关闭">×</button>
+      <div class="detail-media" id="detailMedia"></div>
+      <div class="detail-body">
+        <div class="detail-cat" id="detailCat"></div>
+        <h3 class="detail-title" id="detailTitle"></h3>
+        <p class="detail-desc" id="detailDesc"></p>
+        <div class="detail-meta">
+          <div class="meta-item">
+            <span class="meta-label">所需积分</span>
+            <span class="meta-points" id="detailPoints"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">库存状态</span>
+            <span class="meta-stock" id="detailStock"></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">兑换限制</span>
+            <span class="meta-limit" id="detailLimit"></span>
+          </div>
+        </div>
+        <div class="detail-notes">
+          <p class="notes-title">兑换须知</p>
+          <ul class="notes-list" id="detailNotes"></ul>
+        </div>
+        <div class="detail-actions">
+          <button class="btn btn-primary btn-block" id="redeemBtn">立即兑换</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 兑换确认弹窗 ================= -->
+  <div class="modal-backdrop" id="confirmModal" hidden>
+    <div class="modal confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <button class="modal-close" data-close-modal aria-label="关闭">×</button>
+      <h3 class="modal-title" id="confirmTitle">确认兑换</h3>
+      <div class="confirm-gift">
+        <div class="confirm-gift-icon" id="confirmGiftIcon"></div>
+        <div class="confirm-gift-info">
+          <p class="confirm-gift-name" id="confirmGiftName"></p>
+          <p class="confirm-gift-cat" id="confirmGiftCat"></p>
+        </div>
+      </div>
+
+      <div class="confirm-summary">
+        <div class="summary-row">
+          <span>本次消耗</span>
+          <span class="summary-points" id="confirmCost">--</span>
+        </div>
+        <div class="summary-row">
+          <span>兑换前余额</span>
+          <span id="confirmBefore">--</span>
+        </div>
+        <div class="summary-row">
+          <span>兑换后余额</span>
+          <span class="summary-after" id="confirmAfter">--</span>
+        </div>
+      </div>
+
+      <!-- 实物礼品：收货地址 -->
+      <div class="address-block" id="addressBlock" hidden>
+        <label class="field-label" for="addressSelect">收货地址</label>
+        <div class="address-select-row">
+          <select id="addressSelect" class="field-input"></select>
+          <button type="button" class="btn-link address-add-btn" id="addAddressBtn">新增地址</button>
+        </div>
+      </div>
+
+      <p class="confirm-tip" id="confirmTip"></p>
+
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" data-close-modal>再想想</button>
+        <button class="btn btn-primary" id="confirmBtn">确认兑换</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 积分明细弹窗 ================= -->
+  <div class="modal-backdrop" id="pointsModal" hidden>
+    <div class="modal points-dialog" role="dialog" aria-modal="true" aria-labelledby="pointsTitle">
+      <button class="modal-close" data-close-modal aria-label="关闭">×</button>
+      <h3 class="modal-title" id="pointsTitle">积分明细</h3>
+      <div class="points-balance-bar">
+        <span>当前可用</span>
+        <strong id="pointsModalBalance">--</strong>
+      </div>
+      <div class="points-list" id="pointsList"></div>
+    </div>
+  </div>
+
+  <!-- ================= 收货地址管理弹窗 ================= -->
+  <div class="modal-backdrop" id="addressModal" hidden>
+    <div class="modal address-dialog" role="dialog" aria-modal="true" aria-labelledby="addressModalTitle">
+      <button class="modal-close" data-close-modal aria-label="关闭">×</button>
+      <h3 class="modal-title" id="addressModalTitle">收货地址</h3>
+      <div class="address-list" id="addressList"></div>
+      <form id="addressForm" class="address-form" autocomplete="off">
+        <input type="hidden" id="addressId">
+        <label class="field-label" for="addressLabel">地址标签</label>
+        <input class="field-input" id="addressLabel" type="text" placeholder="如：公司 / 家庭 / 学校" maxlength="20" required>
+        <label class="field-label" for="addressDetail">详细地址</label>
+        <input class="field-input" id="addressDetail" type="text" placeholder="省市区 + 街道门牌号" maxlength="200" required>
+        <div class="address-form-actions">
+          <button type="button" class="btn btn-ghost" id="addressCancelEdit" hidden>取消编辑</button>
+          <button type="submit" class="btn btn-primary" id="addressSaveBtn">保存地址</button>
+        </div>
+      </form>
+      <div class="address-modal-actions">
+        <button class="btn btn-primary" data-close-modal>完成</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 兑换成功弹窗 ================= -->
+  <div class="modal-backdrop" id="successModal" hidden>
+    <div class="modal success-dialog" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+      <div class="success-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <h3 class="modal-title" id="successTitle">兑换成功</h3>
+      <p class="success-desc" id="successDesc"></p>
+      <div class="success-actions">
+        <button class="btn btn-ghost" data-goto-orders>查看兑换记录</button>
+        <button class="btn btn-primary" data-close-modal>继续逛逛</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 通知 -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- 站点运行模式配置：静态部署包会附带 site.config.js 开启只读静态模式；
+       服务端运行时无此文件，自动走真实 API（仅需一条 404 提示，不影响功能） -->
+  <script src="site.config.js"></script>
+  <script src="js/meta.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  </div><!-- /#appView -->
+</body>
+</html>
